@@ -82,7 +82,12 @@ export function requestAccessToken(): Promise<string> {
       resolve(response.access_token)
     }
 
-    tokenClient.requestAccessToken({ prompt: 'consent' })
+    const existingToken = (window as any).gapi?.client?.getToken()
+    if (existingToken === null) {
+      tokenClient.requestAccessToken({ prompt: 'consent' })
+    } else {
+      tokenClient.requestAccessToken({ prompt: '' })
+    }
   })
 }
 

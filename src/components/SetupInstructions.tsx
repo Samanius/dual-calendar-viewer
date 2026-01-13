@@ -48,15 +48,27 @@ export function SetupInstructions({
         </AlertDescription>
       </Alert>
 
+      <Alert className="bg-red-50 border-red-200">
+        <WarningCircle className="h-4 w-4 text-red-600" />
+        <AlertDescription className="text-red-900">
+          <div className="font-bold text-base mb-2">🚨 КРИТИЧЕСКИ ВАЖНО!</div>
+          <div className="space-y-2 text-sm">
+            <p>Если вы получаете ошибку <strong>"ERR_BLOCKED_BY_RESPONSE"</strong>, это значит что вы добавили URL в поле <strong>"Authorized redirect URIs"</strong>.</p>
+            <p className="font-semibold">Это приложение использует Google Identity Services popup mode. Поле "Authorized redirect URIs" должно быть ПОЛНОСТЬЮ ПУСТЫМ - не добавляйте туда НИКАКИЕ URL!</p>
+            <p>Нужно добавить URL только в "Authorized JavaScript origins".</p>
+          </div>
+        </AlertDescription>
+      </Alert>
+
       <Alert className="bg-amber-50 border-amber-200">
         <WarningCircle className="h-4 w-4 text-amber-600" />
         <AlertDescription className="text-amber-900">
           <strong>Самые частые причины ошибки подключения:</strong>
           <ul className="mt-2 ml-4 space-y-1 text-sm list-disc">
-            <li><strong>В Authorized redirect URIs добавлен только один URL</strong> - нужно добавить ОБА (ваш домен И https://accounts.google.com/o/oauth2/token)</li>
             <li>Не добавлен текущий домен в <strong>Authorized JavaScript origins</strong></li>
             <li>Ваш email не добавлен в список <strong>Test users</strong> в OAuth consent screen</li>
-            <li>После создания OAuth client нужно подождать 2-3 минуты для активации</li>
+            <li>После создания OAuth client нужно подождать 5-10 минут для активации</li>
+            <li>Вы случайно скопировали Client Secret вместо Client ID</li>
           </ul>
         </AlertDescription>
       </Alert>
@@ -201,17 +213,14 @@ export function SetupInstructions({
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">5</div>
               <div>
-                <strong>ВАЖНО!</strong> В поле <strong>"Authorized redirect URIs"</strong> добавьте <strong>ОБА</strong> значения:
-                <div className="mt-2 space-y-2">
-                  <div className="p-2 bg-muted rounded font-mono text-xs break-all">
-                    {window.location.origin}
+                <strong>КРИТИЧЕСКИ ВАЖНО!</strong> В поле <strong>"Authorized redirect URIs"</strong> <strong className="text-red-600">НИЧЕГО НЕ ДОБАВЛЯЙТЕ</strong>!
+                <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded text-sm">
+                  <div className="font-semibold text-red-800 mb-1">⚠️ ОСТАВЬТЕ ПОЛЕ ПУСТЫМ</div>
+                  <div className="text-red-700 text-xs">
+                    Это приложение использует Google Identity Services (popup mode), которому НЕ нужны redirect URIs. 
+                    Если вы добавите туда какие-либо URL, это вызовет ошибку "ERR_BLOCKED_BY_RESPONSE". 
+                    Просто оставьте это поле полностью пустым.
                   </div>
-                  <div className="p-2 bg-muted rounded font-mono text-xs break-all">
-                    https://accounts.google.com/o/oauth2/token
-                  </div>
-                </div>
-                <div className="mt-1 text-xs text-red-600 font-semibold">
-                  ⚠️ Это самая частая причина ошибки! Нужно добавить ОБА URI, а не только первый!
                 </div>
               </div>
             </div>
@@ -219,15 +228,15 @@ export function SetupInstructions({
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">6</div>
               <div>
-                Нажмите <strong>"Create"</strong> и скопируйте созданный <strong>Client ID</strong>
+                Нажмите <strong>"Create"</strong> и скопируйте созданный <strong>Client ID</strong> (НЕ Client Secret!)
               </div>
             </div>
 
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">7</div>
               <div>
-                <strong>Важно:</strong> После создания OAuth client может потребоваться несколько минут для активации. 
-                Если сразу не работает - подождите 2-3 минуты и попробуйте снова.
+                <strong>Важно:</strong> После создания OAuth client может потребоваться 5-10 минут для активации. 
+                Если сразу не работает - подождите и попробуйте снова.
               </div>
             </div>
           </div>
@@ -296,22 +305,14 @@ export function SetupInstructions({
             <div className="flex gap-3 items-start">
               <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
               <div>
-                <strong>Authorized redirect URIs содержит ОБА значения:</strong>
-                <div className="mt-1 space-y-1">
-                  <div className="p-2 bg-muted rounded font-mono text-xs break-all">
-                    {window.location.origin}
-                  </div>
-                  <div className="p-2 bg-muted rounded font-mono text-xs break-all">
-                    https://accounts.google.com/o/oauth2/token
-                  </div>
-                </div>
+                <strong>Authorized redirect URIs должно быть ПУСТЫМ</strong> (ничего не добавляйте туда!)
               </div>
             </div>
 
             <div className="flex gap-3 items-start">
               <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
               <div>
-                <strong>Подождали 2-3 минуты</strong> после создания OAuth client
+                <strong>Подождали 5-10 минут</strong> после создания OAuth client
               </div>
             </div>
           </div>
@@ -413,20 +414,16 @@ export function SetupInstructions({
                 ❌ Ошибка: "ERR_BLOCKED_BY_RESPONSE" или "Сайт accounts.google.com заблокирован"
               </div>
               <div className="ml-4 space-y-2">
-                <div><strong>Причина:</strong> Не настроены Authorized redirect URIs или добавлен только один URI</div>
+                <div><strong>Причина:</strong> Вы добавили URL в Authorized redirect URIs, но это приложение использует popup mode и НЕ нуждается в redirect URIs</div>
                 <div><strong>Решение:</strong></div>
                 <ol className="list-decimal ml-6 space-y-1">
                   <li>Вернитесь в Google Cloud Console → Credentials</li>
-                  <li>Нажмите на ваш OAuth 2.0 Client ID</li>
-                  <li>В "Authorized redirect URIs" нажмите "+ ADD URI" и добавьте <strong>ОБА</strong> значения:</li>
-                  <li className="ml-4">
-                    <div className="font-mono bg-background px-1 rounded text-xs break-all">{window.location.origin}</div>
-                  </li>
-                  <li className="ml-4">
-                    <div className="font-mono bg-background px-1 rounded text-xs">https://accounts.google.com/o/oauth2/token</div>
-                  </li>
+                  <li>Нажмите на ваш OAuth 2.0 Client ID для редактирования</li>
+                  <li><strong className="text-red-600">УДАЛИТЕ ВСЕ URL</strong> из поля "Authorized redirect URIs" (оставьте поле полностью пустым)</li>
+                  <li>Убедитесь, что "Authorized JavaScript origins" содержит: <span className="font-mono bg-background px-1 rounded text-xs">{window.location.origin}</span></li>
                   <li>Нажмите "Save"</li>
-                  <li>Подождите 2-3 минуты и попробуйте снова</li>
+                  <li>Подождите 5-10 минут и попробуйте снова</li>
+                  <li>Если не помогло - попробуйте открыть приложение в режиме инкогнито или очистите кэш браузера</li>
                 </ol>
               </div>
             </div>
