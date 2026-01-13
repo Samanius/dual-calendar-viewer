@@ -51,9 +51,9 @@ export function SetupInstructions({
       <Alert className="bg-amber-50 border-amber-200">
         <WarningCircle className="h-4 w-4 text-amber-600" />
         <AlertDescription className="text-amber-900">
-          <strong>Частые причины ошибки подключения:</strong>
+          <strong>Самые частые причины ошибки подключения:</strong>
           <ul className="mt-2 ml-4 space-y-1 text-sm list-disc">
-            <li>Не добавлен <strong>Authorized redirect URI</strong> в настройках OAuth client</li>
+            <li><strong>В Authorized redirect URIs добавлен только один URL</strong> - нужно добавить ОБА (ваш домен И https://accounts.google.com/o/oauth2/token)</li>
             <li>Не добавлен текущий домен в <strong>Authorized JavaScript origins</strong></li>
             <li>Ваш email не добавлен в список <strong>Test users</strong> в OAuth consent screen</li>
             <li>После создания OAuth client нужно подождать 2-3 минуты для активации</li>
@@ -201,12 +201,17 @@ export function SetupInstructions({
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">5</div>
               <div>
-                <strong>ВАЖНО!</strong> В поле <strong>"Authorized redirect URIs"</strong> добавьте:
-                <div className="mt-2 p-2 bg-muted rounded font-mono text-xs break-all">
-                  {window.location.origin}
+                <strong>ВАЖНО!</strong> В поле <strong>"Authorized redirect URIs"</strong> добавьте <strong>ОБА</strong> значения:
+                <div className="mt-2 space-y-2">
+                  <div className="p-2 bg-muted rounded font-mono text-xs break-all">
+                    {window.location.origin}
+                  </div>
+                  <div className="p-2 bg-muted rounded font-mono text-xs break-all">
+                    https://accounts.google.com/o/oauth2/token
+                  </div>
                 </div>
-                <div className="mt-1 text-xs text-muted-foreground">
-                  Без этого шага OAuth авторизация не будет работать!
+                <div className="mt-1 text-xs text-red-600 font-semibold">
+                  ⚠️ Это самая частая причина ошибки! Нужно добавить ОБА URI, а не только первый!
                 </div>
               </div>
             </div>
@@ -291,9 +296,14 @@ export function SetupInstructions({
             <div className="flex gap-3 items-start">
               <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
               <div>
-                <strong>Authorized redirect URIs содержит:</strong>
-                <div className="mt-1 p-2 bg-muted rounded font-mono text-xs break-all">
-                  {window.location.origin}
+                <strong>Authorized redirect URIs содержит ОБА значения:</strong>
+                <div className="mt-1 space-y-1">
+                  <div className="p-2 bg-muted rounded font-mono text-xs break-all">
+                    {window.location.origin}
+                  </div>
+                  <div className="p-2 bg-muted rounded font-mono text-xs break-all">
+                    https://accounts.google.com/o/oauth2/token
+                  </div>
                 </div>
               </div>
             </div>
@@ -403,12 +413,18 @@ export function SetupInstructions({
                 ❌ Ошибка: "ERR_BLOCKED_BY_RESPONSE" или "Сайт accounts.google.com заблокирован"
               </div>
               <div className="ml-4 space-y-2">
-                <div><strong>Причина:</strong> Не настроены Authorized redirect URIs</div>
+                <div><strong>Причина:</strong> Не настроены Authorized redirect URIs или добавлен только один URI</div>
                 <div><strong>Решение:</strong></div>
                 <ol className="list-decimal ml-6 space-y-1">
                   <li>Вернитесь в Google Cloud Console → Credentials</li>
                   <li>Нажмите на ваш OAuth 2.0 Client ID</li>
-                  <li>Убедитесь что в "Authorized redirect URIs" добавлен: <span className="font-mono bg-background px-1 rounded">{window.location.origin}</span></li>
+                  <li>В "Authorized redirect URIs" нажмите "+ ADD URI" и добавьте <strong>ОБА</strong> значения:</li>
+                  <li className="ml-4">
+                    <div className="font-mono bg-background px-1 rounded text-xs break-all">{window.location.origin}</div>
+                  </li>
+                  <li className="ml-4">
+                    <div className="font-mono bg-background px-1 rounded text-xs">https://accounts.google.com/o/oauth2/token</div>
+                  </li>
                   <li>Нажмите "Save"</li>
                   <li>Подождите 2-3 минуты и попробуйте снова</li>
                 </ol>
