@@ -48,6 +48,19 @@ export function SetupInstructions({
         </AlertDescription>
       </Alert>
 
+      <Alert className="bg-amber-50 border-amber-200">
+        <WarningCircle className="h-4 w-4 text-amber-600" />
+        <AlertDescription className="text-amber-900">
+          <strong>Частые причины ошибки подключения:</strong>
+          <ul className="mt-2 ml-4 space-y-1 text-sm list-disc">
+            <li>Не добавлен <strong>Authorized redirect URI</strong> в настройках OAuth client</li>
+            <li>Не добавлен текущий домен в <strong>Authorized JavaScript origins</strong></li>
+            <li>Ваш email не добавлен в список <strong>Test users</strong> в OAuth consent screen</li>
+            <li>После создания OAuth client нужно подождать 2-3 минуты для активации</li>
+          </ul>
+        </AlertDescription>
+      </Alert>
+
       <Card>
         <CardHeader>
           <CardTitle>Шаг 1: Создайте проект в Google Cloud Console</CardTitle>
@@ -137,6 +150,14 @@ export function SetupInstructions({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <Alert className="bg-red-50 border-red-200">
+            <WarningCircle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-900">
+              <strong>Это самый важный шаг!</strong> Ошибка "ERR_BLOCKED_BY_RESPONSE" возникает именно здесь. 
+              Внимательно следуйте всем пунктам.
+            </AlertDescription>
+          </Alert>
+
           <div className="space-y-3 text-sm">
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">1</div>
@@ -148,7 +169,15 @@ export function SetupInstructions({
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">2</div>
               <div>
-                Если требуется, настройте OAuth consent screen (достаточно заполнить обязательные поля)
+                <strong>Если требуется</strong>, настройте OAuth consent screen:
+                <ul className="mt-2 ml-4 space-y-1 text-xs list-disc">
+                  <li>User Type: выберите <strong>"External"</strong></li>
+                  <li>App name: укажите любое название (например, "My Calendar Viewer")</li>
+                  <li>User support email: ваш email</li>
+                  <li>Developer contact information: ваш email</li>
+                  <li>Scopes: можно пропустить (или добавить calendar.readonly)</li>
+                  <li>Test users: добавьте свой Google аккаунт в список тестовых пользователей</li>
+                </ul>
               </div>
             </div>
 
@@ -162,8 +191,8 @@ export function SetupInstructions({
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">4</div>
               <div>
-                В поле <strong>"Authorized JavaScript origins"</strong> добавьте:
-                <div className="mt-2 p-2 bg-muted rounded font-mono text-xs">
+                <strong>ВАЖНО!</strong> В поле <strong>"Authorized JavaScript origins"</strong> добавьте:
+                <div className="mt-2 p-2 bg-muted rounded font-mono text-xs break-all">
                   {window.location.origin}
                 </div>
               </div>
@@ -172,7 +201,107 @@ export function SetupInstructions({
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">5</div>
               <div>
-                Скопируйте созданный <strong>Client ID</strong>
+                <strong>ВАЖНО!</strong> В поле <strong>"Authorized redirect URIs"</strong> добавьте:
+                <div className="mt-2 p-2 bg-muted rounded font-mono text-xs break-all">
+                  {window.location.origin}
+                </div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  Без этого шага OAuth авторизация не будет работать!
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">6</div>
+              <div>
+                Нажмите <strong>"Create"</strong> и скопируйте созданный <strong>Client ID</strong>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">7</div>
+              <div>
+                <strong>Важно:</strong> После создания OAuth client может потребоваться несколько минут для активации. 
+                Если сразу не работает - подождите 2-3 минуты и попробуйте снова.
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Separator />
+
+      <Card className="border-2 border-accent/50">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CheckCircle className="h-5 w-5 text-accent" />
+            Контрольный список перед подключением
+          </CardTitle>
+          <CardDescription>
+            Убедитесь, что выполнили все эти шаги
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3 text-sm">
+            <div className="flex gap-3 items-start">
+              <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
+              <div>
+                <strong>Google Calendar API включен</strong> в вашем проекте
+              </div>
+            </div>
+            
+            <div className="flex gap-3 items-start">
+              <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
+              <div>
+                <strong>API Key создан</strong> и скопирован
+              </div>
+            </div>
+            
+            <div className="flex gap-3 items-start">
+              <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
+              <div>
+                <strong>OAuth Consent Screen настроен</strong> с типом "External"
+              </div>
+            </div>
+            
+            <div className="flex gap-3 items-start">
+              <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
+              <div>
+                <strong>Ваш email добавлен в Test users</strong> (в OAuth consent screen)
+              </div>
+            </div>
+            
+            <div className="flex gap-3 items-start">
+              <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
+              <div>
+                <strong>OAuth Client ID создан</strong> с типом "Web application"
+              </div>
+            </div>
+            
+            <div className="flex gap-3 items-start">
+              <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
+              <div>
+                <strong>Authorized JavaScript origins содержит:</strong>
+                <div className="mt-1 p-2 bg-muted rounded font-mono text-xs break-all">
+                  {window.location.origin}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex gap-3 items-start">
+              <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
+              <div>
+                <strong>Authorized redirect URIs содержит:</strong>
+                <div className="mt-1 p-2 bg-muted rounded font-mono text-xs break-all">
+                  {window.location.origin}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3 items-start">
+              <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
+              <div>
+                <strong>Подождали 2-3 минуты</strong> после создания OAuth client
               </div>
             </div>
           </div>
@@ -259,6 +388,87 @@ export function SetupInstructions({
           через Google API.
         </AlertDescription>
       </Alert>
+
+      <Card className="bg-muted/50">
+        <CardHeader>
+          <CardTitle>Решение проблем</CardTitle>
+          <CardDescription>
+            Если при нажатии "Подключиться к Google" возникают ошибки
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-4 text-sm">
+            <div>
+              <div className="font-semibold text-destructive mb-2">
+                ❌ Ошибка: "ERR_BLOCKED_BY_RESPONSE" или "Сайт accounts.google.com заблокирован"
+              </div>
+              <div className="ml-4 space-y-2">
+                <div><strong>Причина:</strong> Не настроены Authorized redirect URIs</div>
+                <div><strong>Решение:</strong></div>
+                <ol className="list-decimal ml-6 space-y-1">
+                  <li>Вернитесь в Google Cloud Console → Credentials</li>
+                  <li>Нажмите на ваш OAuth 2.0 Client ID</li>
+                  <li>Убедитесь что в "Authorized redirect URIs" добавлен: <span className="font-mono bg-background px-1 rounded">{window.location.origin}</span></li>
+                  <li>Нажмите "Save"</li>
+                  <li>Подождите 2-3 минуты и попробуйте снова</li>
+                </ol>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div>
+              <div className="font-semibold text-destructive mb-2">
+                ❌ Ошибка: "Access blocked: This app's request is invalid"
+              </div>
+              <div className="ml-4 space-y-2">
+                <div><strong>Причина:</strong> Не добавлен ваш email в Test users</div>
+                <div><strong>Решение:</strong></div>
+                <ol className="list-decimal ml-6 space-y-1">
+                  <li>Откройте Google Cloud Console → OAuth consent screen</li>
+                  <li>Прокрутите до секции "Test users"</li>
+                  <li>Нажмите "+ ADD USERS"</li>
+                  <li>Добавьте email адрес вашего Google аккаунта</li>
+                  <li>Нажмите "Save"</li>
+                </ol>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div>
+              <div className="font-semibold text-destructive mb-2">
+                ❌ Ошибка: "invalid_client"
+              </div>
+              <div className="ml-4 space-y-2">
+                <div><strong>Причина:</strong> Неправильный Client ID или не настроены JavaScript origins</div>
+                <div><strong>Решение:</strong></div>
+                <ol className="list-decimal ml-6 space-y-1">
+                  <li>Проверьте что скопировали правильный Client ID (не Client Secret!)</li>
+                  <li>Убедитесь что "Authorized JavaScript origins" содержит: <span className="font-mono bg-background px-1 rounded">{window.location.origin}</span></li>
+                </ol>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div>
+              <div className="font-semibold text-amber-700 mb-2">
+                ⚠️ Ошибка: "Ошибка инициализации API"
+              </div>
+              <div className="ml-4 space-y-2">
+                <div><strong>Причина:</strong> Неправильный API Key или не включен Calendar API</div>
+                <div><strong>Решение:</strong></div>
+                <ol className="list-decimal ml-6 space-y-1">
+                  <li>Проверьте что скопировали правильный API Key</li>
+                  <li>Убедитесь что Google Calendar API включен (Enable) в вашем проекте</li>
+                  <li>Попробуйте пересоздать API Key</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

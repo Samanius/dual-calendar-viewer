@@ -34,19 +34,20 @@ This is a focused calendar visualization tool with API integration, calendar sel
 - **Success criteria**: Navigation is instant, current date is clearly indicated
 
 ### Setup Instructions
-- **Functionality**: Dedicated tab/view with step-by-step instructions for connecting Google Calendar
-- **Purpose**: Guide users through OAuth setup and API key configuration
+- **Functionality**: Dedicated tab/view with step-by-step instructions for connecting Google Calendar, including detailed OAuth configuration and troubleshooting guide
+- **Purpose**: Guide users through OAuth setup and API key configuration with clear error prevention and resolution
 - **Trigger**: User navigates to "Setup" tab
-- **Progression**: User opens setup tab → Read instructions → Follow Google Cloud Console steps → Obtain credentials → Input credentials → Test connection → Return to calendar view
-- **Success criteria**: Instructions are clear enough for non-technical users, includes screenshots or visual aids
+- **Progression**: User opens setup tab → Read instructions → Follow Google Cloud Console steps → Configure OAuth consent screen → Set authorized URIs → Obtain credentials → Input credentials → Test connection → Return to calendar view
+- **Success criteria**: Instructions are clear enough for non-technical users, includes all critical OAuth configuration steps (Authorized JavaScript origins, Authorized redirect URIs, Test users), provides troubleshooting section for common errors
 
 ## Edge Case Handling
 
 - **No Events**: Display empty time grid with all slots marked as free
 - **Overlapping Events**: Display merged busy block for overlapping event times
 - **All-Day Events**: Show indicator bar at top of calendar column without blocking hourly slots
-- **Failed API Connection**: Display clear error message with link back to setup instructions
-- **Invalid Credentials**: Show specific error about credentials and prompt re-configuration
+- **Failed API Connection**: Display clear error message with link back to setup instructions and specific troubleshooting steps
+- **Invalid Credentials**: Show specific error about credentials (invalid API key, invalid Client ID, missing OAuth configuration) with solution guidance
+- **OAuth Authorization Errors**: Handle ERR_BLOCKED_BY_RESPONSE, invalid_client, and access_blocked errors with detailed resolution steps in setup instructions
 - **No Calendars Selected**: Display placeholder prompting user to select calendars
 - **Timezone Differences**: Display all times in user's local timezone with clear label
 
