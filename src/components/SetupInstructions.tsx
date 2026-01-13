@@ -53,9 +53,8 @@ export function SetupInstructions({
         <AlertDescription className="text-blue-900">
           <div className="font-bold text-base mb-2">ℹ️ Важная информация</div>
           <div className="space-y-2 text-sm">
-            <p>Это приложение использует Google Identity Services в режиме popup - окно авторизации откроется во всплывающем окне.</p>
-            <p>Вам нужно добавить URL вашего приложения только в <strong>"Authorized JavaScript origins"</strong>.</p>
-            <p>Поле <strong>"Authorized redirect URIs"</strong> можно оставить пустым или добавить туда любой URL - это не повлияет на работу.</p>
+            <p>Это приложение использует Google Identity Services в режиме redirect - после авторизации Google перенаправит вас обратно.</p>
+            <p>Вам нужно добавить URL вашего приложения в <strong>"Authorized JavaScript origins"</strong> И в <strong>"Authorized redirect URIs"</strong>.</p>
           </div>
         </AlertDescription>
       </Alert>
@@ -165,8 +164,8 @@ export function SetupInstructions({
           <Alert className="bg-blue-50 border-blue-200">
             <Info className="h-4 w-4 text-blue-600" />
             <AlertDescription className="text-blue-900">
-              <strong>Важный шаг!</strong> Авторизация будет происходить через всплывающее окно Google. 
-              Убедитесь, что ваш браузер не блокирует всплывающие окна для этого сайта.
+              <strong>Важный шаг!</strong> Авторизация будет происходить через перенаправление на страницу Google. 
+              После успешной авторизации Google перенаправит вас обратно.
             </AlertDescription>
           </Alert>
 
@@ -213,7 +212,10 @@ export function SetupInstructions({
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">5</div>
               <div>
-                Поле <strong>"Authorized redirect URIs"</strong> можно оставить пустым (приложение использует popup mode)
+                <strong>ОБЯЗАТЕЛЬНО!</strong> В поле <strong>"Authorized redirect URIs"</strong> добавьте:
+                <div className="mt-2 p-2 bg-muted rounded font-mono text-xs break-all">
+                  {window.location.origin}/
+                </div>
               </div>
             </div>
 
@@ -297,7 +299,10 @@ export function SetupInstructions({
             <div className="flex gap-3 items-start">
               <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
               <div>
-                <strong>Authorized redirect URIs</strong> можно оставить пустым (приложение работает в popup режиме)
+                <strong>Authorized redirect URIs содержит:</strong>
+                <div className="mt-1 p-2 bg-muted rounded font-mono text-xs break-all">
+                  {window.location.origin}/
+                </div>
               </div>
             </div>
 
@@ -406,11 +411,12 @@ export function SetupInstructions({
                 ❌ Ошибка: "invalid_client" или проблемы с авторизацией
               </div>
               <div className="ml-4 space-y-2">
-                <div><strong>Причина:</strong> Неправильный Client ID или не настроены JavaScript origins</div>
+                <div><strong>Причина:</strong> Неправильный Client ID или не настроены JavaScript origins / redirect URIs</div>
                 <div><strong>Решение:</strong></div>
                 <ol className="list-decimal ml-6 space-y-1">
                   <li>Проверьте что скопировали правильный Client ID (не Client Secret!)</li>
                   <li>Убедитесь что "Authorized JavaScript origins" содержит: <span className="font-mono bg-background px-1 rounded">{window.location.origin}</span></li>
+                  <li>Убедитесь что "Authorized redirect URIs" содержит: <span className="font-mono bg-background px-1 rounded">{window.location.origin}/</span></li>
                   <li>Подождите 5-10 минут после создания OAuth client и попробуйте снова</li>
                 </ol>
               </div>
@@ -455,14 +461,16 @@ export function SetupInstructions({
 
             <div>
               <div className="font-semibold text-amber-700 mb-2">
-                ⚠️ Всплывающее окно не открывается
+                ⚠️ Ошибка: "redirect_uri_mismatch"
               </div>
               <div className="ml-4 space-y-2">
-                <div><strong>Причина:</strong> Браузер блокирует всплывающие окна</div>
+                <div><strong>Причина:</strong> Redirect URI не совпадает с настройками OAuth client</div>
                 <div><strong>Решение:</strong></div>
                 <ol className="list-decimal ml-6 space-y-1">
-                  <li>Разрешите всплывающие окна для этого сайта в настройках браузера</li>
-                  <li>Обычно иконка блокировки появляется справа в адресной строке</li>
+                  <li>Откройте Google Cloud Console → Credentials → ваш OAuth client</li>
+                  <li>Убедитесь что "Authorized redirect URIs" содержит ТОЧНО: <span className="font-mono bg-background px-1 rounded">{window.location.origin}/</span></li>
+                  <li>Обратите внимание на слэш "/" в конце - он обязателен</li>
+                  <li>После изменений подождите пару минут</li>
                 </ol>
               </div>
             </div>

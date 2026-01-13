@@ -11,6 +11,7 @@ import {
   listCalendars,
   isApiInitialized,
   hasValidToken,
+  checkForAuthCallback,
 } from '@/lib/google-calendar-api'
 import { Gear, CalendarBlank } from '@phosphor-icons/react'
 
@@ -22,9 +23,36 @@ function App() {
   const [activeTab, setActiveTab] = useState('setup')
 
   useEffect(() => {
-    if (config?.apiKey && config?.clientId) {
-      initializeAPI()
+    const handleAuthCallback = async () => {
+      const accessToken = checkForAuthCallback()
+      
+      if (accessToken && config?.apiKey && config?.clientId) {
+        setIsInitializing(true)
+        try {
+          const initialized = await initializeGoogleAPI({
+            apiKey: config.apiKey,
+            clientId: config.clientId,
+          })
+
+          if (initialized) {
+            await requestAccessToken()
+            await loadCalendars()
+            setIsConnected(true)
+            setActiveTab('calendars')
+            toast.success('Успешное подключение к Google Calendar')
+          }
+        } catch (error) {
+          console.error('Error handling auth callback:', error)
+          toast.error('Ошибка обработки авторизации')
+        } finally {
+          setIsInitializing(false)
+        }
+      } else if (config?.apiKey && config?.clientId) {
+        initializeAPI()
+      }
     }
+
+    handleAuthCallback()
   }, [config])
 
   const initializeAPI = async () => {
@@ -66,17 +94,13 @@ function App() {
         await initializeAPI()
       }
 
-      const token = await requestAccessToken()
-      
-      if (token) {
-        await loadCalendars()
-        setIsConnected(true)
-        toast.success('Успешное подключение к Google Calendar')
-        setActiveTab('calendars')
+      toast.info('Перенаправление на страницу авторизации Google...')
+      await requestAccessToken()
+    } catch (error: any) {
+      if (error.message !== 'Redirect initiated') {
+        console.error('Error connecting:', error)
+        toast.error('Ошибка подключения. Проверьте учетные данные.')
       }
-    } catch (error) {
-      console.error('Error connecting:', error)
-      toast.error('Ошибка подключения. Проверьте учетные данные.')
     }
   }
 

@@ -23,11 +23,13 @@ export async function initializeGoogleAPI(config: GoogleCalendarConfig): Promise
       })
     })
 
+    const redirectUri = `${window.location.origin}/`
+    
     tokenClient = (window as any).google.accounts.oauth2.initTokenClient({
       client_id: config.clientId,
       scope: SCOPES,
-      ux_mode: 'popup',
-      callback: '', 
+      ux_mode: 'redirect',
+      redirect_uri: redirectUri,
     })
     gisInited = true
 
@@ -75,12 +77,14 @@ export function requestAccessToken(): Promise<string> {
       return
     }
 
-    tokenClient.callback = (response: any) => {
-      if (response.error) {
-        reject(new Error(response.error))
-        return
-      }
-      resolve(response.access_token)
+    const urlParams = new URLSearchParams(window.location.search)
+    const accessToken = urlParams.get('access_token')
+    
+    if (accessToken) {
+      (window as any).gapi.client.setToken({ access_token: accessToken })
+      window.history.replaceState({}, document.title, window.location.pathname)
+      resolve(accessToken)
+      return
     }
 
     const existingToken = (window as any).gapi?.client?.getToken()
@@ -89,6 +93,8 @@ export function requestAccessToken(): Promise<string> {
     } else {
       tokenClient.requestAccessToken({ prompt: '' })
     }
+    
+    reject(new Error('Redirect initiated'))
   })
 }
 
@@ -149,4 +155,9 @@ export function isApiInitialized(): boolean {
 export function hasValidToken(): boolean {
   const token = (window as any).gapi?.client?.getToken()
   return !!token
+}
+
+export function checkForAuthCallback(): string | null {
+  const urlParams = new URLSearchParams(window.location.search)
+  return urlParams.get('access_token')
 }
