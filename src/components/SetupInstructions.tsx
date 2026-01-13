@@ -48,14 +48,14 @@ export function SetupInstructions({
         </AlertDescription>
       </Alert>
 
-      <Alert className="bg-red-50 border-red-200">
-        <WarningCircle className="h-4 w-4 text-red-600" />
-        <AlertDescription className="text-red-900">
-          <div className="font-bold text-base mb-2">🚨 КРИТИЧЕСКИ ВАЖНО!</div>
+      <Alert className="bg-blue-50 border-blue-200">
+        <Info className="h-4 w-4 text-blue-600" />
+        <AlertDescription className="text-blue-900">
+          <div className="font-bold text-base mb-2">ℹ️ Важная информация</div>
           <div className="space-y-2 text-sm">
-            <p>Если вы получаете ошибку <strong>"ERR_BLOCKED_BY_RESPONSE"</strong>, это значит что вы добавили URL в поле <strong>"Authorized redirect URIs"</strong>.</p>
-            <p className="font-semibold">Это приложение использует Google Identity Services popup mode. Поле "Authorized redirect URIs" должно быть ПОЛНОСТЬЮ ПУСТЫМ - не добавляйте туда НИКАКИЕ URL!</p>
-            <p>Нужно добавить URL только в "Authorized JavaScript origins".</p>
+            <p>Это приложение использует Google Identity Services в режиме popup - окно авторизации откроется во всплывающем окне.</p>
+            <p>Вам нужно добавить URL вашего приложения только в <strong>"Authorized JavaScript origins"</strong>.</p>
+            <p>Поле <strong>"Authorized redirect URIs"</strong> можно оставить пустым или добавить туда любой URL - это не повлияет на работу.</p>
           </div>
         </AlertDescription>
       </Alert>
@@ -162,11 +162,11 @@ export function SetupInstructions({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Alert className="bg-red-50 border-red-200">
-            <WarningCircle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-900">
-              <strong>Это самый важный шаг!</strong> Ошибка "ERR_BLOCKED_BY_RESPONSE" возникает именно здесь. 
-              Внимательно следуйте всем пунктам.
+          <Alert className="bg-blue-50 border-blue-200">
+            <Info className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-900">
+              <strong>Важный шаг!</strong> Авторизация будет происходить через всплывающее окно Google. 
+              Убедитесь, что ваш браузер не блокирует всплывающие окна для этого сайта.
             </AlertDescription>
           </Alert>
 
@@ -213,15 +213,7 @@ export function SetupInstructions({
             <div className="flex gap-3">
               <div className="font-mono bg-muted px-2 py-1 rounded text-xs shrink-0">5</div>
               <div>
-                <strong>КРИТИЧЕСКИ ВАЖНО!</strong> В поле <strong>"Authorized redirect URIs"</strong> <strong className="text-red-600">НИЧЕГО НЕ ДОБАВЛЯЙТЕ</strong>!
-                <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded text-sm">
-                  <div className="font-semibold text-red-800 mb-1">⚠️ ОСТАВЬТЕ ПОЛЕ ПУСТЫМ</div>
-                  <div className="text-red-700 text-xs">
-                    Это приложение использует Google Identity Services (popup mode), которому НЕ нужны redirect URIs. 
-                    Если вы добавите туда какие-либо URL, это вызовет ошибку "ERR_BLOCKED_BY_RESPONSE". 
-                    Просто оставьте это поле полностью пустым.
-                  </div>
-                </div>
+                Поле <strong>"Authorized redirect URIs"</strong> можно оставить пустым (приложение использует popup mode)
               </div>
             </div>
 
@@ -305,7 +297,7 @@ export function SetupInstructions({
             <div className="flex gap-3 items-start">
               <div className="w-5 h-5 rounded border-2 border-accent shrink-0 mt-0.5"></div>
               <div>
-                <strong>Authorized redirect URIs должно быть ПУСТЫМ</strong> (ничего не добавляйте туда!)
+                <strong>Authorized redirect URIs</strong> можно оставить пустым (приложение работает в popup режиме)
               </div>
             </div>
 
@@ -411,23 +403,18 @@ export function SetupInstructions({
           <div className="space-y-4 text-sm">
             <div>
               <div className="font-semibold text-destructive mb-2">
-                ❌ Ошибка: "ERR_BLOCKED_BY_RESPONSE" или "Сайт accounts.google.com заблокирован"
+                ❌ Ошибка: "invalid_client" или проблемы с авторизацией
               </div>
               <div className="ml-4 space-y-2">
-                <div><strong>Причина:</strong> Вы добавили URL в Authorized redirect URIs, но это приложение использует popup mode и НЕ нуждается в redirect URIs</div>
+                <div><strong>Причина:</strong> Неправильный Client ID или не настроены JavaScript origins</div>
                 <div><strong>Решение:</strong></div>
                 <ol className="list-decimal ml-6 space-y-1">
-                  <li>Вернитесь в Google Cloud Console → Credentials</li>
-                  <li>Нажмите на ваш OAuth 2.0 Client ID для редактирования</li>
-                  <li><strong className="text-red-600">УДАЛИТЕ ВСЕ URL</strong> из поля "Authorized redirect URIs" (оставьте поле полностью пустым)</li>
-                  <li>Убедитесь, что "Authorized JavaScript origins" содержит: <span className="font-mono bg-background px-1 rounded text-xs">{window.location.origin}</span></li>
-                  <li>Нажмите "Save"</li>
-                  <li>Подождите 5-10 минут и попробуйте снова</li>
-                  <li>Если не помогло - попробуйте открыть приложение в режиме инкогнито или очистите кэш браузера</li>
+                  <li>Проверьте что скопировали правильный Client ID (не Client Secret!)</li>
+                  <li>Убедитесь что "Authorized JavaScript origins" содержит: <span className="font-mono bg-background px-1 rounded">{window.location.origin}</span></li>
+                  <li>Подождите 5-10 минут после создания OAuth client и попробуйте снова</li>
                 </ol>
               </div>
             </div>
-
             <Separator />
 
             <div>
@@ -450,22 +437,6 @@ export function SetupInstructions({
             <Separator />
 
             <div>
-              <div className="font-semibold text-destructive mb-2">
-                ❌ Ошибка: "invalid_client"
-              </div>
-              <div className="ml-4 space-y-2">
-                <div><strong>Причина:</strong> Неправильный Client ID или не настроены JavaScript origins</div>
-                <div><strong>Решение:</strong></div>
-                <ol className="list-decimal ml-6 space-y-1">
-                  <li>Проверьте что скопировали правильный Client ID (не Client Secret!)</li>
-                  <li>Убедитесь что "Authorized JavaScript origins" содержит: <span className="font-mono bg-background px-1 rounded">{window.location.origin}</span></li>
-                </ol>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div>
               <div className="font-semibold text-amber-700 mb-2">
                 ⚠️ Ошибка: "Ошибка инициализации API"
               </div>
@@ -476,6 +447,22 @@ export function SetupInstructions({
                   <li>Проверьте что скопировали правильный API Key</li>
                   <li>Убедитесь что Google Calendar API включен (Enable) в вашем проекте</li>
                   <li>Попробуйте пересоздать API Key</li>
+                </ol>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div>
+              <div className="font-semibold text-amber-700 mb-2">
+                ⚠️ Всплывающее окно не открывается
+              </div>
+              <div className="ml-4 space-y-2">
+                <div><strong>Причина:</strong> Браузер блокирует всплывающие окна</div>
+                <div><strong>Решение:</strong></div>
+                <ol className="list-decimal ml-6 space-y-1">
+                  <li>Разрешите всплывающие окна для этого сайта в настройках браузера</li>
+                  <li>Обычно иконка блокировки появляется справа в адресной строке</li>
                 </ol>
               </div>
             </div>

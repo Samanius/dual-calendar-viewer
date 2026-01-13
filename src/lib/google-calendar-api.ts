@@ -26,6 +26,7 @@ export async function initializeGoogleAPI(config: GoogleCalendarConfig): Promise
     tokenClient = (window as any).google.accounts.oauth2.initTokenClient({
       client_id: config.clientId,
       scope: SCOPES,
+      ux_mode: 'popup',
       callback: '', 
     })
     gisInited = true
