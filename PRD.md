@@ -34,11 +34,11 @@ This is a focused calendar visualization tool with API integration, calendar sel
 - **Success criteria**: Navigation is instant, current date is clearly indicated
 
 ### Setup Instructions
-- **Functionality**: Dedicated tab/view with step-by-step instructions for connecting Google Calendar, including detailed OAuth configuration and troubleshooting guide
-- **Purpose**: Guide users through OAuth setup and API key configuration with clear error prevention and resolution
+- **Functionality**: Dedicated tab/view with step-by-step instructions for connecting Google Calendar using browser-only OAuth2 implicit flow, including detailed configuration and troubleshooting guide
+- **Purpose**: Guide users through OAuth setup and API key configuration for client-side authentication (no backend server required)
 - **Trigger**: User navigates to "Setup" tab
-- **Progression**: User opens setup tab → Read instructions → Follow Google Cloud Console steps → Configure OAuth consent screen → Set authorized URIs → Obtain credentials → Input credentials → Test connection → Return to calendar view
-- **Success criteria**: Instructions are clear enough for non-technical users, includes all critical OAuth configuration steps (Authorized JavaScript origins, Authorized redirect URIs, Test users), provides troubleshooting section for common errors
+- **Progression**: User opens setup tab → Read instructions → Follow Google Cloud Console steps → Configure OAuth consent screen for Web Application → Set authorized JavaScript origins and redirect URIs → Obtain API key and Client ID (no Client Secret needed) → Input credentials → Authorize with Google → Return to calendar view
+- **Success criteria**: Instructions clarify this is browser-only authentication, includes all critical OAuth configuration steps (Authorized JavaScript origins, Authorized redirect URIs, Test users), provides troubleshooting section for common errors, explains why no backend server is needed
 
 ## Edge Case Handling
 
@@ -50,6 +50,7 @@ This is a focused calendar visualization tool with API integration, calendar sel
 - **OAuth Authorization Errors**: Handle ERR_BLOCKED_BY_RESPONSE, invalid_client, and access_blocked errors with detailed resolution steps in setup instructions
 - **No Calendars Selected**: Display placeholder prompting user to select calendars
 - **Timezone Differences**: Display all times in user's local timezone with clear label
+- **Browser-Only OAuth**: Use implicit flow (redirect-based) OAuth2 as this is a client-side only application without backend server
 
 ## Design Direction
 
